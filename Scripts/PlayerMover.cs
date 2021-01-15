@@ -5,12 +5,15 @@ using UnityEngine;
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    [SerializeField] private float _boosterCourutineWaitingSeconds = 0.25f;
+    [SerializeField] private float _addBoostingForceStep = 3f;
+    [SerializeField] private float _boostingWaitForSeconds = 0.15f;
 
     private float _boosterTime = 0;
     private float _boosterForce = 0;
     private float _speedWithoutBoosters;
     private Vector3 _moveDirection;
+    private float _elapsedTime = 0;
+    private int _boosterTimerWaitingSeconds = 1;
 
     private void Start ()
     {
@@ -24,18 +27,32 @@ public class PlayerMover : MonoBehaviour
             _boosterForce = enemyBooster.BoosterForce;
             _boosterTime = enemyBooster.BoosterTime;
 
-            ChangeSpeed(_speed * _boosterForce);
-            StartCoroutine(BoosterTimer());
+            StartCoroutine(Booster());
         }
+    }
+
+    private IEnumerator Booster ()
+    {
+        var waitForSeconds = new WaitForSeconds(_boostingWaitForSeconds);
+
+        while (_speed < _speedWithoutBoosters + _boosterForce)
+        {
+            ChangeSpeed(_speed + _addBoostingForceStep);
+            yield return waitForSeconds;
+        }
+
+        StartCoroutine(BoosterTimer());
+        StopCoroutine(Booster());
     }
 
     private IEnumerator BoosterTimer ()
     {
-        var waitForSeconds = new WaitForSeconds(_boosterCourutineWaitingSeconds);
+        var waitForSeconds = new WaitForSeconds(_boosterTimerWaitingSeconds);
+        _elapsedTime = 0;
 
-        for (float i = _boosterTime; i > 0; i -= _boosterCourutineWaitingSeconds)
+        while (_elapsedTime < _boosterTime)
         {
-            ChangeSpeed(_speed - _boosterCourutineWaitingSeconds * (_speed - _speedWithoutBoosters));
+            _elapsedTime += _boosterTimerWaitingSeconds;
             yield return waitForSeconds;
         }
 

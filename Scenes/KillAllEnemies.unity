@@ -694,7 +694,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 7
-  _boosterCourutineWaitingSeconds: 0.25
+  _addBoostingForceStep: 1
+  _boostingWaitForSeconds: 0.5
 --- !u!58 &1761935015
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -802,7 +803,7 @@ PrefabInstance:
     - target: {fileID: 4014301005003325891, guid: 158104e9e0dfbcc419fe33badcac7ab1,
         type: 3}
       propertyPath: _boosterTime
-      value: 2
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 4014301005003325891, guid: 158104e9e0dfbcc419fe33badcac7ab1,
         type: 3}

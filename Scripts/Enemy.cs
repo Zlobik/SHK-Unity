@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected float Speed = 2;
-    [SerializeField] protected float TargetSpreed = 4;
+    [SerializeField] private float _speed = 2;
+    [SerializeField] private float _targetSpreed = 4;
 
     private Vector3 _target;
 
@@ -17,19 +17,19 @@ public class Enemy : MonoBehaviour
 
     private void Start ()
     {
-        SetNewTarget();
+        CreateNewTarget();
     }
 
     private void Update ()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _target, Speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _target, _speed * Time.deltaTime);
 
         if (transform.position == _target)
-            SetNewTarget();
+            CreateNewTarget();
     }
 
-    protected void SetNewTarget ()
+    protected void CreateNewTarget ()
     {
-        _target = Random.insideUnitCircle * TargetSpreed;
+        _target = Random.insideUnitCircle * _targetSpreed;
     }
 }
