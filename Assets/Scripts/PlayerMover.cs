@@ -12,8 +12,6 @@ public class PlayerMover : MonoBehaviour
     private float _boosterForce = 0;
     private float _speedWithoutBoosters;
     private Vector3 _moveDirection;
-    private float _elapsedTime = 0;
-    private int _boosterTimerWaitingSeconds = 1;
 
     private void Start ()
     {
@@ -33,31 +31,16 @@ public class PlayerMover : MonoBehaviour
 
     private IEnumerator Booster ()
     {
-        var waitForSeconds = new WaitForSeconds(_boostingWaitForSeconds);
+        var waitForSeconds = new WaitForSeconds(_boosterTime);
+        ChangeSpeed(_speed + _boosterForce);
 
-        while (_speed < _speedWithoutBoosters + _boosterForce)
+        for (int i = 0; i < 1; i++)
         {
-            ChangeSpeed(_speed + _addBoostingForceStep);
-            yield return waitForSeconds;
-        }
-
-        StartCoroutine(BoosterTimer());
-        StopCoroutine(Booster());
-    }
-
-    private IEnumerator BoosterTimer ()
-    {
-        var waitForSeconds = new WaitForSeconds(_boosterTimerWaitingSeconds);
-        _elapsedTime = 0;
-
-        while (_elapsedTime < _boosterTime)
-        {
-            _elapsedTime += _boosterTimerWaitingSeconds;
             yield return waitForSeconds;
         }
 
         ChangeSpeed(_speedWithoutBoosters);
-        StopCoroutine(BoosterTimer());
+        StopCoroutine(Booster());
     }
 
     private void ChangeSpeed (float speed)
